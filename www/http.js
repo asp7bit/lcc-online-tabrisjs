@@ -1,7 +1,7 @@
 
 module.exports = new function(){
 	var http = {};
-	
+
 	http.encode = function(data)
 	{
 		var query = [];
@@ -11,7 +11,7 @@ module.exports = new function(){
 		}
 		return query.join('&');
 	}
-	
+
 	http.get = function(url, callback)
 	{
 		var options = {
@@ -22,7 +22,7 @@ module.exports = new function(){
 		}
 		this.do(options);
 	}
-	
+
 	http.post = function(url, data, callback)
 	{
 		var options = {
@@ -33,7 +33,7 @@ module.exports = new function(){
 		}
 		this.do(options);
 	}
-	
+
 	// grab arbitrary url
 	http.do = function(options)
 	{
@@ -41,6 +41,7 @@ module.exports = new function(){
 		var async = true;
 		var method = options.method || 'GET';
 		var params = this.encode(options.data) || '';
+
 	    var xhr = new tabris.XMLHttpRequest();
 		var callback = options.callback;
 
@@ -55,20 +56,20 @@ module.exports = new function(){
 				callback({'raw': result, 'parsed': parsed})
 			}
 	    };
-		
+
 		// prepare the url for GET requests
 		if (method == 'GET')
 		{
-			if (url.indexOf('?') == -1)
-			{
-				url += '?';
-			}
+			if (url.indexOf('?') == -1) url += '?';
+			else url += '&';
+
 			url += params;
+			console.log(url);
 		}
-		
+
 		// actually open the connection
 	    xhr.open(method, url, async);
-		
+
 		if (method == 'POST')
 		{
 			//Send the proper header information along with the request
@@ -82,6 +83,6 @@ module.exports = new function(){
 			xhr.send();
 		}
 	}
-	
+
 	return http;
 }

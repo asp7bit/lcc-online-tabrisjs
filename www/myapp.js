@@ -6,23 +6,28 @@ var data = require('./sample');
 var http = require('./http');
 var browser = require('./browser');
 var home = require('./home');
+var sermons = require('./sermons');
+var player = require('./player');
 
 
 var pages = {
 	home: home.page,
 	browser: browser.page,
-	news: news.page
+	news: news.page,
+	series: series.page,
 }
 home.page.open();
 
-
-
 // preload the news
-http.get('http://lafayettecc.org/news/category/news/?json=true&count=30&offset=5', function(result)
-{
-	news.data = result.parsed;
-	news.render();
-})
+// http.get('http://lafayettecc.org/news/category/news/?json=true&posts_per_page=30&offset=0', function(result)
+// {
+// 	news.data = result.parsed;
+// 	news.render();
+// })
+news.fetch({posts_per_page: 30, offset:0});
+
+// preload the sermons
+sermons.fetch();
 
 // preload the live event page
 browser.load('http://lafayettecc.org/live/');
@@ -67,6 +72,16 @@ var menuItems = [
 	},
 	{
 		image: 'img/podcast-logo.jpg',
+		title: 'LCC News',
+		page: 'news',
+	},
+	{
+		image: 'img/podcast-logo.jpg',
+		title: 'Messages',
+		page: 'series'
+	},
+	{
+		image: 'img/podcast-logo.jpg',
 		title: 'Give Online',
 		url: 'http://lafayettecc.org/give',
 		fullscreen:true,
@@ -75,17 +90,6 @@ var menuItems = [
 		image: 'img/podcast-logo.jpg',
 		title: 'Prayer Request',
 		url: 'http://lafayettecc.org/lcc_live/prayer_request',
-		fullscreen:true,
-	},
-	{
-		image: 'img/podcast-logo.jpg',
-		title: 'LCC News',
-		page: 'news',
-	},
-	{
-		image: 'img/podcast-logo.jpg',
-		title: 'Messages',
-		url: 'http://lafayettecc.org/mobile/custom_reader.php?all_series&cachebreaker=12',
 		fullscreen:true,
 	},
 	{

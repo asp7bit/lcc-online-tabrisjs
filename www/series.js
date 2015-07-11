@@ -1,17 +1,17 @@
 var globals = require('./globals');
 var http = require('./http');
 var htmltools = require('./htmltools');
-var post = require('./post');
+var post = require('./single-series');
 
 var MARGIN = Number(globals.MARGIN);
 
-var news = {}
+var series = {}
 
-news.rendered = false;
-news.data = {};
-news.url = 'http://lafayettecc.org/news/category/news/?json=true';
+series.rendered = false;
+series.data = {};
+series.url = 'http://lafayettecc.org/news/series/?json=true';
 
-news.fetch = function(options)
+series.fetch = function(options)
 {
 	// options should contain posts_per_page and offset if desirable
 	var that = this;
@@ -28,13 +28,13 @@ news.fetch = function(options)
 	})
 }
 
-news.page = tabris.create("Page", {
+series.page = tabris.create("Page", {
 	topLevel: true,
 	title: "LCC News",
 	image: 'img/podcast-logo.jpg',
 });
 
-news.render = function()
+series.render = function()
 {
 	// dispose previous collection view
 	if (this.rendered)
@@ -103,7 +103,7 @@ news.render = function()
 				}).appendTo(textHolder);
 
 			    cell.on("change:item", function(widget, post) {
-					var imgSource = post.thumbnail || post.image[0] || post.meta.poster[0] || "img/podcast-logo.jpg";
+					var imgSource = post.thumbnail || "img/podcast-logo.jpg";
 					imageView.set("image", {src: imgSource});
 					dateTextView.set('text', post.date);
 					titleTextView.set("text", post.title);
@@ -123,4 +123,4 @@ news.render = function()
 }
 
 
-module.exports = news;
+module.exports = series;

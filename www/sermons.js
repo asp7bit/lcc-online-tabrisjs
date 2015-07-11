@@ -9,7 +9,7 @@ var news = {}
 
 news.rendered = false;
 news.data = {};
-news.url = 'http://lafayettecc.org/news/category/news/?json=true';
+news.url = 'http://lafayettecc.org/news/sermon/?json=true';
 
 news.fetch = function(options)
 {
@@ -103,7 +103,7 @@ news.render = function()
 				}).appendTo(textHolder);
 
 			    cell.on("change:item", function(widget, post) {
-					var imgSource = post.thumbnail || post.image[0] || post.meta.poster[0] || "img/podcast-logo.jpg";
+					var imgSource = post.thumbnail || "img/podcast-logo.jpg";
 					imageView.set("image", {src: imgSource});
 					dateTextView.set('text', post.date);
 					titleTextView.set("text", post.title);

@@ -1,8 +1,10 @@
 var globals = require('./globals');
 var htmltools = require('./htmltools');
-var MARGIN = globals.MARGIN;
+var MARGIN = Number(globals.MARGIN);
 var MARGIN_SMALL = MARGIN / 2;
 var titleCompY = 0;
+
+var player = require('./player')
 
 var post = {}
 
@@ -21,7 +23,7 @@ post.create = function(data)
 	var imageTextView = tabris.create("ImageView", {
 		id: 'image',
 		layoutData: {left: 0, top: 0, right: 0},
-		image: data.image[0] || 'img/podcast-logo.jpg',
+		image: data.image[0] || data.meta.poster[0] || 'img/podcast-logo.jpg',
 		scaleMode: 'fill',
 	}).appendTo(scrollView);
 
@@ -31,9 +33,37 @@ post.create = function(data)
 	  background: "white"
 	}).appendTo(scrollView);
 
+	// create the buttons for playing media if any exists
+	console.log(data.enclosures);
+
+	if (data.enclosures.video)
+	{
+		var videoPlayerButton = tabris.create('Button', {
+			layoutData: {left:MARGIN, top:MARGIN},
+			id: 'btn-video',
+			text: "Play Video"
+		}).on('select', function(widget)
+		{
+			player.play(data.enclosures.video.url);
+		}).appendTo(contentComposite);
+	}
+
+	if (data.enclosures.audio)
+	{
+		var audioPlayerButton = tabris.create('Button', {
+			id: 'btn-audio',
+			layoutData: {left: ['#btn-video', MARGIN], top: MARGIN},
+			text: "Play Audio"
+		}).on('select', function(widget)
+		{
+			player.play(data.enclosures.audio.url);
+		}).appendTo(contentComposite);
+	}
+
+
 	tabris.create("TextView", {
 		id: 'content',
-		layoutData: {left: MARGIN, right: MARGIN, top: MARGIN},
+		layoutData: {left: MARGIN, right: MARGIN, top: ['Button', MARGIN]},
 		markupEnabled: true,
 		text: "<p><b>Click the title bar to view this post in a browser.</b></p>" + htmltools.filter(data.filtered),
 	}).appendTo(contentComposite);
