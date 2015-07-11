@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="my.first.app" version="1.0.0">
-  <name>test</name>
+<widget id="org.lafayettecc.lcconline2" version="0.1.0">
+  <name>LCC Online2</name>
   <description>
-    a testing application
+    Testing Tabris.js
   </description>
   <author email="jeffmikels@gmail.com" href="https://jeffmikels.org">
-    Jeff MIkels
+    Jeff Mikels
   </author>
   <content src="package.json" />
 </widget>
