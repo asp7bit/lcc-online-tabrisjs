@@ -1,5 +1,5 @@
 
-module.exports = function(){
+module.exports = new function(){
 	var http = {};
 	
 	http.encode = function(data)

@@ -15,14 +15,21 @@ var pages = {
 }
 home.page.open();
 
-http.get('http://lafayettecc.org/news/category/news/?json=true&offset=10', function(result)
+
+
+// preload the news
+http.get('http://lafayettecc.org/news/category/news/?json=true&count=30&offset=5', function(result)
 {
-	console.log(result.raw);
+	news.data = result.parsed;
+	news.render();
 })
 
-
 // preload the live event page
-browser.go('http://lafayettecc.org/live/', true);
+browser.load('http://lafayettecc.org/live/');
+// browser.go('loader.html');
+
+
+
 
 // create the navigation drawer
 var drawer = tabris.create("Drawer");
@@ -48,11 +55,6 @@ tabris.create('ImageView',{
 	background: "#000",
 }).appendTo(menu_header);
 
-// TODO: create menu manually instead of using the page selector
-// var pageSelector = tabris.create("PageSelector", {
-// 	id: '#drawer-collection',
-// 	layoutData: {left: 0, top: ['#drawer-image',1], right: 0},
-// }).appendTo(drawer);
 
 
 // creating menu items
@@ -117,9 +119,9 @@ tabris.create('CollectionView', {
 	    var titleTextView = tabris.create("TextView", {
 	    	layoutData: {left: [imageView, globals.MARGIN], centerY:0, right: globals.MARGIN},
 	    	alignment: "left",
-			wrap:true,
+			wrap:false,
 			markupEnabled:true,
-			font:"bold 24px",
+			font:"bold 20px sans-serif",
 	    }).appendTo(cell);
 	    cell.on("change:item", function(widget, item) {
 			var imgSource = item.image || "img/podcast-logo.jpg";
@@ -130,17 +132,18 @@ tabris.create('CollectionView', {
 }).on('select',function(target, item){
 	if (typeof(item.url) != 'undefined')
 	{
-		browser.window.set('url', item.url);
-		if (item.fullscreen)
-		{
-			browser.window.appendTo(browser.fullscreen)
-			browser.fullscreen.open();
-		}
-		else
-		{
-			browser.window.appendTo(browser.page);
-			browser.page.open();
-		}
+		browser.go(item.url, item.fullscreen);
+		// browser.load(item.url);
+		// if (item.fullscreen)
+		// {
+		// 	browser.window.appendTo(browser.fullscreen)
+		// 	browser.go(url)
+		// }
+		// else
+		// {
+		// 	browser.window.appendTo(browser.page);
+		// 	browser.page.open();
+		// }
 	}
 	if (typeof(item.page) != 'undefined')
 	{

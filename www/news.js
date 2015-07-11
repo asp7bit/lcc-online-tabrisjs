@@ -1,5 +1,5 @@
 var globals = require('./globals');
-var data = require('./data');
+var data = require('./sample');
 var http = require('./http');
 var htmltools = require('./htmltools');
 var post = require('./post');
@@ -14,51 +14,71 @@ news.page = tabris.create("Page", {
 	image: 'img/podcast-logo.jpg',
 });
 
+news.render = function()
+{
+	// dispose previous collection view
+	if (this.collection) this.collection.dispose();
+	
+	// create the collection view
+	this.collection = tabris.create('CollectionView', {
+		layoutData:{top:['#header'], left:MARGIN, right:MARGIN, bottom:0},
+		items: this.data.posts,
+		itemHeight: 80,
+		initializeCell: function(cell) {
+		    var imageView = tabris.create("ImageView", {
+		    	layoutData: {left:0, top:0, width: 80, height: 80},
+				scaleMode: 'fill'
+		    }).appendTo(cell);
+			
+			// text holder
+			var textHolder = tabris.create('Composite', {
+				layoutData: {left: [imageView, MARGIN], top:0, right: MARGIN, height:80}
+			}).appendTo(cell);
+			
+			// date
+			var dateTextView = tabris.create('TextView', {
+				layoutData: {left: 0, top:0, height:12},
+				alignment: 'left',
+				markupEnabled: false,
+				textColor: "rgb(200,200,200)",
+				font: '10px',
+			}).appendTo(textHolder);
+			
+			// title
+		    var titleTextView = tabris.create("TextView", {
+		    	layoutData: {left: 0, top:[dateTextView, 0], height:20},
+		    	alignment: "left",
+				wrap:false,
+				markupEnabled:true,
+				font: '16px',
+				textColor:"rgba(0,0,0,.5)",
+		    }).appendTo(textHolder);
+			
+			// summary
+			var excerptTextView = tabris.create('TextView', {
+				layoutData: {left:0, top:[titleTextView, 0], height:48},
+				alignment:'left',
+				wrap:true,
+				markupEnabled:true,
+				font: '10px',
+				textColor: '#999'
+			}).appendTo(textHolder);
+			
+		    cell.on("change:item", function(widget, post) {
+				var imgSource = post.thumbnail || "img/podcast-logo.jpg";
+				imageView.set("image", {src: imgSource});
+				dateTextView.set('text', post.date);
+				titleTextView.set("text", post.title);
+				excerptTextView.set('text', post.excerpt.substr(0,100) + '...');
+		    });
+		}
+	}).on('select',function(target, value){
+		console.log('selected');
+		console.log(value.title);
+		var this_post = post.create(value);
+		this_post.page.open();
+	}).appendTo(this.page)
+}
 
-
-
-// create the pretty scrolling area
-// var scroller = tabris.create('ScrollView',{
-// 	id: 'scroller',
-// 	layoutData: {top:0, left:0, right:0, bottom:0}
-// }).appendTo(news.page);
-
-// // create the pretty picture
-// var header = tabris.create('ImageView', {
-// 	id: 'header',
-// 	layoutData: {top:0, left:0, right:0, height:30},
-// 	image: 'img/podcast-logo.jpg',
-// 	scaleMode: 'fill',
-// }).appendTo(scroller);
-
-// create the collection view
-tabris.create('CollectionView', {
-	layoutData:{top:['#header'], left:MARGIN, right:MARGIN, bottom:0},
-	items: news.data.posts,
-	itemHeight: 50,
-	initializeCell: function(cell) {
-	    var imageView = tabris.create("ImageView", {
-	    	layoutData: {left:0, top:0, width: 50, height: 50,}
-	    }).appendTo(cell);
-	    var titleTextView = tabris.create("TextView", {
-	    	layoutData: {left: [imageView, MARGIN], centerY:0, right: MARGIN},
-	    	alignment: "left",
-			wrap:true,
-			markupEnabled:true,
-			color:"#rgba(255,0,0,.5)",
-	    }).appendTo(cell);
-	    cell.on("change:item", function(widget, post) {
-			var imgSource = post.thumbnail || "img/podcast-logo.jpg";
-			imageView.set("image", {src: imgSource});
-			imageView.set('scaleMode', 'fill');
-			titleTextView.set("text", post.title);
-	    });
-	}
-}).on('select',function(target, value){
-	console.log('selected');
-	console.log(value.title);
-	var this_post = post.create(value);
-	this_post.page.open();
-}).appendTo(news.page)
 
 module.exports = news;
