@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="my.first.app" version="1.0.0">
+  <name>test</name>
+  <description>
+    a testing application
+  </description>
+  <author email="jeffmikels@gmail.com" href="https://jeffmikels.org">
+    Jeff MIkels
+  </author>
+  <content src="package.json" />
+</widget>
