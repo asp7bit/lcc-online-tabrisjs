@@ -2,7 +2,8 @@ var globals = require('./globals');
 
 // import pages
 var news = require('./news');
-var data = require('./data');
+var data = require('./sample');
+var http = require('./http');
 var browser = require('./browser');
 var home = require('./home');
 
@@ -13,15 +14,15 @@ var pages = {
 	news: news.page
 }
 home.page.open();
-browser.go('http://lafayettecc.org/mobile', true);
 
-// news.page.open();
+http.get('http://lafayettecc.org/news/category/news/?json=true&offset=10', function(result)
+{
+	console.log(result.raw);
+})
 
-// browser.page.set('title',"LCC Website");
-// browser.window.set('url', "http://lafayettecc.org/mobile");
-// browser.page.open()
-// news.page.open()
 
+// preload the live event page
+browser.go('http://lafayettecc.org/live/', true);
 
 // create the navigation drawer
 var drawer = tabris.create("Drawer");
@@ -148,6 +149,8 @@ tabris.create('CollectionView', {
 	drawer.close();
 }).appendTo(drawer)
 
+// color drawer text white
+drawer.apply('*', {textColor:"#559"})
 
 
 

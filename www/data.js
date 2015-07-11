@@ -1,4 +1,42 @@
-{
+
+module.exports = function(){
+	var data = {};
+	
+	data.urls = {
+		'news': 'http://lafayettecc.org/news/category/news/?json=true',
+		'series': 'http://lafayettecc.org/news/series/?json=true',
+		'messages': 'http://lafayettecc.org/news/messages/?json=true'
+	}
+	
+	// grab arbitrary json source
+	data.grab = function(url)
+	{
+		var that = this;
+	    var xhr = new tabris.XMLHttpRequest();
+	    xhr.onreadystatechange = function() {
+			if (xhr.readyState === xhr.DONE) {
+				var result = xhr.responseText;
+				that.result = result;
+				that.parsed = JSON.parse(result) || {};
+			}
+	    };
+	    xhr.open("GET", url);
+	    xhr.send();
+	}
+	
+	data.update = function()
+	{
+		//default urls
+		urls = 
+	}
+	
+	
+	
+	data.sample = sample;
+	return data;
+}
+
+var sample = {
     "blog_desc": "a contemporary church in Lafayette, Indiana helping people find full life in Christ",
     "blog_rss": "http://lafayettecc.org/news/feed/",
     "blog_title": "Lafayette Community Church",

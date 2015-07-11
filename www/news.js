@@ -1,18 +1,21 @@
 var globals = require('./globals');
 var data = require('./data');
+var http = require('./http');
 var htmltools = require('./htmltools');
 var post = require('./post');
 
 var MARGIN = Number(globals.MARGIN);
 
 var news = {}
-
 news.data = data;
 news.page = tabris.create("Page", {
 	topLevel: true,
 	title: "LCC News",
 	image: 'img/podcast-logo.jpg',
 });
+
+
+
 
 // create the pretty scrolling area
 // var scroller = tabris.create('ScrollView',{
