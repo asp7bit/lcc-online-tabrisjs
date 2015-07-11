@@ -1,3 +1,47 @@
+/*
+
+TODO:
+1. Abstract pages into modules:
+
+	PAGE TEMPLATE MODULE:
+	- the template for a parallax scrolling page with an image at the top, a title bar, and content
+		The page is generated on app load.
+		The page is populated by calling a render function containing
+			image,
+			title,
+			title-bar-color,
+			date,
+			items
+				title,
+				date,
+				excerpt,
+				enclosures,
+				image,
+				filtered-content
+			filtered-content
+
+	CONTENT TEMPLATE
+	- one module is the template for a textview of content -- called from the template module
+
+	ITEMS TEMPLATE
+	- one module is the template for a list of items -- called from the template module
+
+	BROWSER PAGE
+	-- already done --
+
+2. Fix Media Player
+3. Fix Local Storage in web browser
+
+EVENTUALLY:
+
+1. Convert mobile pages to native widgets.
+2. Allow Logging In.
+3. Allow PayPal Donations.
+4. Allow User Profile Management.
+
+*/
+
+
 var globals = require('./globals');
 
 // import pages
@@ -14,7 +58,7 @@ var pages = {
 	home: home.page,
 	browser: browser.page,
 	news: news.page,
-	series: series.page,
+	sermons: sermons.page,
 }
 home.page.open();
 
@@ -78,7 +122,7 @@ var menuItems = [
 	{
 		image: 'img/podcast-logo.jpg',
 		title: 'Messages',
-		page: 'series'
+		page: 'sermons'
 	},
 	{
 		image: 'img/podcast-logo.jpg',
